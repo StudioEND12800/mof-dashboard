@@ -342,6 +342,14 @@ df_view = df_view[
 # ──────────────────────────────────────────
 st.markdown("# 🏆 MOF France — Tableau de bord")
 st.caption("Meilleurs Ouvriers de France · Base consolidée multi-sources")
+st.info(
+    "⚠️ **Avertissement** — Cette base est une extraction et une recompilation des informations "
+    "trouvées sur le web par des robots et des scripts. Elle peut contenir des erreurs ! "
+    "N'hésitez pas à nous en faire part à l'adresse : "
+    "[contact@studio-end.fr](mailto:contact@studio-end.fr).  \n"
+    "Utilisez la même adresse si vous souhaitez être effacé de cette liste (**RGPD**).",
+    icon="⚠️",
+)
 
 # ──────────────────────────────────────────
 # ZONE DE QUESTION EN LANGAGE NATUREL
