@@ -312,7 +312,10 @@ with st.sidebar:
         _ast_b64 = _b64.b64encode(asterion_path.read_bytes()).decode()
         st.markdown(
             f'<div style="text-align:center; padding: 18px 0 4px 0;">'
-            f'<img src="data:image/png;base64,{_ast_b64}" width="80">'
+            f'<a href="https://asterion.studio-end.com" target="_blank">'
+            f'<img src="data:image/png;base64,{_ast_b64}" width="80" style="opacity:0.85; transition:opacity 0.2s;" '
+            f'onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'0.85\'">'
+            f'</a>'
             f'</div>',
             unsafe_allow_html=True,
         )
