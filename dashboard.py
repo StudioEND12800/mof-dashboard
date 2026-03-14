@@ -305,6 +305,25 @@ with st.sidebar:
     st.divider()
     st.caption(f"Base : **{len(df_full):,} MOFs**  •  {promo_min}–{promo_max}")
 
+    # ── Logo Astérion + crédits ──────────────────────────
+    asterion_path = Path(__file__).parent / "assets" / "logo_asterion.png"
+    if asterion_path.exists():
+        import base64 as _b64
+        _ast_b64 = _b64.b64encode(asterion_path.read_bytes()).decode()
+        st.markdown(
+            f'<div style="text-align:center; padding: 18px 0 4px 0;">'
+            f'<img src="data:image/png;base64,{_ast_b64}" width="80">'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+    st.markdown(
+        '<div style="text-align:center; font-size:0.68rem; color:#8899aa; line-height:1.6; padding-bottom:8px;">'
+        'Dev par <strong>Nicolas DELSAUT</strong><br>'
+        '©&nbsp;Studio END WEBDESIGN&nbsp;— Rodez'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
 # Filtre sidebar
 df_view = df_full.copy()
 if sel_region:
