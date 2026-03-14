@@ -454,6 +454,29 @@ k5.metric("Années de promo", int(df_view["Promotion"].nunique()))
 st.markdown("---")
 
 # ──────────────────────────────────────────
+# LISTE FILTRÉE (affichée quand filtres actifs)
+# ──────────────────────────────────────────
+_filtered = len(df_view) < len(df_full)
+if _filtered:
+    with st.expander(f"📋 Liste des {len(df_view):,} MOFs sélectionnés", expanded=True):
+        disp_cols = ["Num_Dept", "Département", "Région", "Nom complet", "Métier",
+                     "Promotion", "Classe", "Ville", "Entreprise", "Téléphone", "Email"]
+        st.dataframe(
+            df_view[disp_cols].sort_values(["Num_Dept", "Nom complet"]),
+            hide_index=True,
+            height=400,
+            use_container_width=True,
+        )
+        csv_bytes = df_view[disp_cols].to_csv(index=False).encode("utf-8-sig")
+        st.download_button(
+            "⬇️ Télécharger la sélection (CSV)",
+            data=csv_bytes,
+            file_name="mof_selection.csv",
+            mime="text/csv",
+        )
+    st.markdown("---")
+
+# ──────────────────────────────────────────
 # GRAPHIQUES PRINCIPAUX
 # ──────────────────────────────────────────
 tab1, tab2, tab3, tab4 = st.tabs(["🗺️ Géographie", "🔨 Métiers", "📅 Promotions", "📋 Données"])
