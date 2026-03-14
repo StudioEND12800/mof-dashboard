@@ -397,7 +397,7 @@ if question:
         if df_q["Département"].ne("").any():
             sub_cols[2].metric("Départements", df_q[df_q["Département"].ne("")]["Département"].nunique())
         if df_q["Promotion"].notna().any():
-            sub_cols[3].metric("Promotions", df_q["Promotion"].notna().sum())
+            sub_cols[3].metric("Avec promo connue", int(df_q["Promotion"].notna().sum()))
 
         # Graphiques contextuels
         c1, c2 = st.columns(2)
@@ -443,7 +443,7 @@ k1.metric("Total MOFs", f"{len(df_view):,}")
 k2.metric("Métiers distincts", df_view[df_view["Métier"].ne("")]["Métier"].nunique())
 k3.metric("Départements", df_view[df_view["Département"].ne("")]["Département"].nunique())
 k4.metric("Régions", df_view[df_view["Région"].ne("")]["Région"].nunique())
-k5.metric("Promotions connues", int(df_view["Promotion"].notna().sum()))
+k5.metric("Années de promo", int(df_view["Promotion"].nunique()))
 
 st.markdown("---")
 
