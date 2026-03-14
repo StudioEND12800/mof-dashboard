@@ -286,6 +286,9 @@ with st.sidebar:
     st.markdown("---")
     st.title("Filtres")
 
+    # Recherche par nom
+    search_nom = st.text_input("🔍 Rechercher un nom", "", placeholder="ex : Dupont, Marie…")
+
     regions_opts = sorted([r for r in df_full["Région"].unique() if r])
     sel_region = st.multiselect("Région", regions_opts)
 
@@ -329,6 +332,9 @@ with st.sidebar:
 
 # Filtre sidebar
 df_view = df_full.copy()
+if search_nom:
+    _sn = search_nom.lower()
+    df_view = df_view[df_view["_nom_lower"].str.contains(_sn, na=False)]
 if sel_region:
     df_view = df_view[df_view["Région"].isin(sel_region)]
 if sel_dept:
@@ -385,7 +391,7 @@ with col_ex:
         question = exemple_choisi
 
 if question:
-    answer, df_q, flt = answer_question(question, df_full)
+    answer, df_q, flt = answer_question(question, df_view)
     st.info(answer, icon="🔎")
 
     if len(df_q) > 0 and len(df_q) < len(df_full):
@@ -549,10 +555,10 @@ with tab1:
 
     if active_dept or active_region:
         if active_dept:
-            subset = df_full[df_full["Département"] == active_dept]
+            subset = df_view[df_view["Département"] == active_dept]
             label  = f"département **{active_dept}**"
         else:
-            subset = df_full[df_full["Région"] == active_region]
+            subset = df_view[df_view["Région"] == active_region]
             label  = f"région **{active_region}**"
 
         st.markdown(f"---\n### 📋 {len(subset)} MOFs — {label}")
