@@ -5,18 +5,24 @@ Lancer : streamlit run dashboard.py
 
 import re
 import unicodedata
+import base64
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from pathlib import Path
+from PIL import Image
 
 # ──────────────────────────────────────────
 # CONFIG
 # ──────────────────────────────────────────
+_MEDAILLE_PATH = Path(__file__).parent / "assets" / "medaille-mof.png"
+_medaille_icon = Image.open(_MEDAILLE_PATH) if _MEDAILLE_PATH.exists() else "🏆"
+_medaille_b64 = base64.b64encode(_MEDAILLE_PATH.read_bytes()).decode() if _MEDAILLE_PATH.exists() else ""
+
 st.set_page_config(
     page_title="MOF France – Tableau de bord",
-    page_icon="🏆",
+    page_icon=_medaille_icon,
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -42,7 +48,14 @@ def _check_password() -> bool:
             "<div style='max-width:360px; margin:80px auto 0 auto'>",
             unsafe_allow_html=True,
         )
-        st.markdown("### 🏆 MOF France – Accès privé")
+        if _medaille_b64:
+            st.markdown(
+                f'<div style="text-align:center; margin-bottom:8px;">'  
+                f'<img src="data:image/png;base64,{_medaille_b64}" width="60">'  
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+        st.markdown("### MOF France – Accès privé")
         pwd = st.text_input("Mot de passe", type="password", key="_pwd_input")
         if st.button("Connexion", use_container_width=True):
             if hmac.compare_digest(pwd, expected):
@@ -273,7 +286,6 @@ def answer_question(question: str, df: pd.DataFrame) -> tuple[str, pd.DataFrame]
 with st.sidebar:
     logo_path = Path(__file__).parent / "assets" / "logo_snmof_color.png"
     if logo_path.exists():
-        import base64
         logo_b64 = base64.b64encode(logo_path.read_bytes()).decode()
         st.markdown(
             f'<div style="text-align:center; padding: 8px 0 4px 0;">'
@@ -282,7 +294,15 @@ with st.sidebar:
             unsafe_allow_html=True,
         )
     else:
-        st.markdown("### 🏆 MOF")
+        if _medaille_b64:
+            st.markdown(
+                f'<div style="text-align:center; padding: 8px 0 4px 0;">'  
+                f'<img src="data:image/png;base64,{_medaille_b64}" width="60">'  
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown("### MOF")
     st.markdown("---")
     st.title("Filtres")
 
@@ -311,8 +331,7 @@ with st.sidebar:
     # ── Logo Astérion + crédits ──────────────────────────
     asterion_path = Path(__file__).parent / "assets" / "logo_asterion.png"
     if asterion_path.exists():
-        import base64 as _b64
-        _ast_b64 = _b64.b64encode(asterion_path.read_bytes()).decode()
+        _ast_b64 = base64.b64encode(asterion_path.read_bytes()).decode()
         st.markdown(
             f'<div style="text-align:center; padding: 18px 0 4px 0;">'
             f'<a href="https://asterion.studio-end.com" target="_blank">'
@@ -349,7 +368,12 @@ df_view = df_view[
 # ──────────────────────────────────────────
 # HEADER PRINCIPAL
 # ──────────────────────────────────────────
-st.markdown("# 🏆 MOF France — Tableau de bord")
+_hcol1, _hcol2 = st.columns([1, 9])
+with _hcol1:
+    if _MEDAILLE_PATH.exists():
+        st.image(str(_MEDAILLE_PATH), width=72)
+with _hcol2:
+    st.markdown("# MOF France — Tableau de bord")
 st.info(
     "**Meilleurs Ouvriers de France · Base consolidée multi-sources**  \n"
     "⚠️ Cette base est une extraction et une recompilation des informations trouvées sur le web "
